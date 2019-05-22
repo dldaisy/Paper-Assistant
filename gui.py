@@ -2,6 +2,9 @@ import tkinter as tk
 from tkinter.scrolledtext import ScrolledText
 from PIL import Image, ImageTk
 
+from search import search
+from analyze import field_analyze
+
 def resize(w, h, w_box, h_box, pil_image):
 
   f1 = 1.0*w_box/w
@@ -45,11 +48,11 @@ check_4.place(x = 280, y =300)
 
 
 #=========搜索选项======================
-def Search(input_string, input_source = None) -> str:
-    pass
+def Search(input_string, **kwargs) -> str:
+    return search(input_string, **kwargs)
 
 def Search_Analysis(input_string) -> str:
-    pass
+    return field_analyze(input_string)
 
 def SearchAbstract():
     input_string = InputKeyword.get()
@@ -62,8 +65,9 @@ def SearchAbstract():
         input_source.append('Arxiv')
     if(var4.get() == 1):
         input_source.clear()
+    if not input_source:
         input_source.append('All')
-    text = Search(input_string, input_source)
+    text = Search(input_string, input_source=input_source, type="abstract")
     #output window
     output = ScrolledText()
     output.config(width = 80, height = 20)
@@ -72,7 +76,7 @@ def SearchAbstract():
 
 def SearchComment():
     input_string = InputKeyword.get()
-    text = Search(input_string)
+    text = Search(input_string, type="comment")
     # output window
     output = ScrolledText()
     output.config(width=80, height=20)
@@ -82,6 +86,7 @@ def SearchComment():
 def DataAnalysis():
     # 使用canvas显示image
     pass
+    
 button_1 = tk.Button(window, text = '搜索摘要', command = SearchAbstract)
 button_1.place(x = 10, y =400)
 
