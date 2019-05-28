@@ -58,7 +58,7 @@ def field_analyze(word):
     if not key_counts:
         raise NoKeywordError(word) 
     
-    return key_counts
+    return draw_pie_chart(key_counts)
 
 #绘图
 
@@ -85,8 +85,8 @@ def draw_pie_chart(some_counts):
     
     suffix = datetime.now().isoformat(timespec='seconds')
     suffix = suffix.replace(":", "-")
-    filename = fig_dir + "pie-" + suffix + ".png"
-    plt.savefig(filename, dpi=600)
+    filename = fig_dir + "pie-" + suffix + ".jpg"
+    plt.savefig(filename, dpi=300)
     
     return filename
 
@@ -102,7 +102,7 @@ class error(Exception):
 
 class NoKeywordError(error):
     def __init__(self, word):
-        super(message="There is no paper with keyword %s" % word)
+        super(NoKeywordError, self).__init__(message="There is no paper with keyword %s" % word)
         
         
 # 测试

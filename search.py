@@ -43,22 +43,27 @@ def get_paper_list():
     ]
     
     return test_list
-
-def search(word, input_source=["All"], type=None):
+    
+def search(words, input_source=["All"], type=None):
     """
     返回需要显示的文本
+    
+    words   :   以空格分隔的单词列表
     type:
         - None 返回标题，作者 
         - "abstract" ： 返回标题，作者、摘要
         - "comment"  :  返回标题、作者、评论
     """
+
+    words = words.split()
+    print(words)
     
     paper_list = get_paper_list()
     paper_list = filter_source(paper_list, input_source)
     
     count = 10                  # 最多显示的论文数
     
-    sort_paper(paper_list, word) 
+    sort_paper(paper_list, words) 
     paper_list_len = len(paper_list)
     show_len = min(count, paper_list_len)
 
@@ -68,16 +73,16 @@ def search(word, input_source=["All"], type=None):
         show_paper.append("title:\t\t"+paper["title"])
         show_paper.append("author:\t\t"+paper["authors"])
         if type=="abstract":
-            show_paper.append("abstract:\t"+paper["abstract"])
+            show_paper.append("abstract:\t\t"+paper["abstract"])
         elif type=="comment":
-            show_paper.append("commment:\t"+paper["comment"])
+            show_paper.append("commment:\t\t"+paper["comment"])
         show_str = '\n'.join(show_paper)
         show_list.append(show_str)
     return '\n\n'.join(show_list)
 
 # 评分、排序
 
-def pre_score(paper_list, word):
+def pre_score(paper_list, words):
     """
     获取DF参数
     
@@ -87,17 +92,18 @@ def pre_score(paper_list, word):
     
     for paper in paper_list: 
         for _, value in paper.items():
-            rtn += value.count(word) 
+            for word in words:
+                rtn += value.count(word) 
     
     return rtn 
     
-def score(paper_list, word):
+def score(paper_list, words):
     """
     为所有文章评分，根据给定关键字，将结果写入paper对象的
     score子段
     params:
         - paper_list    : 论文列表
-        - word          : 带检索单词
+        - words          : 带检索单词列表
     formula:
         W = TF * IDF 
         IDF = log(N/DF)
@@ -106,9 +112,10 @@ def score(paper_list, word):
     N = len(paper_list)
     for paper in paper_list: 
         IDF = 0 
-        for _, value in paper.items():
-            TF = value.count(word) 
-            IDF += TF
+        for word in words:
+            for _, value in paper.items():
+                TF = value.count(word) 
+                IDF += TF
         score_list.append(IDF) 
     DF = sum(score_list)    
     IDF = log(N/DF)
@@ -117,11 +124,8 @@ def score(paper_list, word):
     for paper, score in zip(paper_list, score_list):
         paper["score"] = score 
 
-def sort_paper(paper_list, word):
-    # def cmp(paper0, paper1):
-        # return paper0["score"] > paper1["score"]
-    
-    score(paper_list, word)
+def sort_paper(paper_list, words):    
+    score(paper_list, words)
     paper_list.sort(key=lambda paper : paper["score"], reverse=False)
 
 # 筛选、过滤
