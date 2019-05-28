@@ -100,8 +100,8 @@ def SearchComment():
 
 # ===============图片===================
 input_string1 = InputKeyword.get()
-file_name = 'image1.jpg'  # 测试使用的
-#file_name = Search_Analysis(input_string1)
+#file_name = 'image1.jpg'  # 测试使用的
+file_name = Search_Analysis(input_string1)
 image1 = Image.open(file_name)
 render1 = ImageTk.PhotoImage(image1)
 
