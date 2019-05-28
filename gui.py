@@ -7,6 +7,8 @@ from analyze import field_analyze
 
 
 
+
+
 # =========主体==============
 
 def resize(w, h, w_box, h_box, pil_image):
@@ -23,9 +25,14 @@ window = tk.Tk()
 window.title('gui')
 window.geometry('1000x800')
 
+
+
+# =========美工=============
+title = tk.Label(window, text = 'Paper Assistant', font = ('Times', '40', 'bold italic'))
+title.place(x = 10, y = 10)
+# =========输入框=================
 keyword = tk.Label(window, text = '关键字', bg = '#434343', fg = '#ffffff',anchor = 'nw')
 keyword.place(x = 10, y =200)
-#=========输入框=================
 InputKeyword = tk.Entry(window)
 InputKeyword.place(x = 100, y = 200)
 
@@ -92,25 +99,22 @@ def SearchComment():
 
 
 # ===============图片===================
-image1 = Image.open('image1.jpg')
+input_string1 = InputKeyword.get()
+file_name = 'image1.jpg'  # 测试使用的
+#file_name = Search_Analysis(input_string1)
+image1 = Image.open(file_name)
 render1 = ImageTk.PhotoImage(image1)
 
-image2 = Image.open('image2.jpg')
-render2 = ImageTk.PhotoImage(image2)
 
 def DataAnalysis():
     # 使用canvas显示image
+
     top = tk.Toplevel()
     top.title("分析图表")
     top.geometry('600x400')
     # =========image 1============
     img1 = tk.Label(top, image = render1)
     img1.place(x=10, y=10)
-    # =========image 2============
-    img2 = tk.Label(top, image=render2)
-    img2.place(x=10, y=10)
-
-
 
 
 button_1 = tk.Button(window, text = '搜索摘要', command = SearchAbstract)
