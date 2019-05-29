@@ -68,6 +68,42 @@ def Search(input_string, **kwargs) -> str:
 def Search_Analysis(input_string) -> str:
     return field_analyze(input_string)
 
+
+i=0
+length = 0
+ret_list = []
+def NextPage():
+    # ==============================================
+    global i
+    global length
+
+    i = i+1
+    content = ret_list[(i-1)%length]
+    #output window
+    title = tk.Label(window, text = "Title", font = ('Times', '10', 'bold'))
+    title.place(x = 400, y = 10)
+    title_text = tk.Text(window, height = 2)
+    title_text.insert('insert', content['title'])
+    title_text.place(x = 400, y = 30)
+
+
+    author = tk.Label(window, text = "Author", font = ('Times', '10', 'bold'))
+    author.place(x = 400, y = 60)
+    author_text = tk.Text(window, height = 2)
+    author_text.insert('insert', content['authors'])
+    author_text.place(x = 400, y = 80)
+
+    abstract = tk.Label(window, text="Abstract", font=('Times', '10', 'bold'))
+    abstract.place(x=400, y=110)
+    output = ScrolledText()
+    output.config(width = 80, height = 12)
+    output.place(x = 400, y = 130)
+    output.insert('insert', content['abstract'])
+
+    # ====下一页按钮========
+    button_next = tk.Button(window, text='next', command=NextPage)
+    button_next.place(x=940, y=300)
+
 def SearchAbstract():
     input_string = InputKeyword.get()
     input_source = []
@@ -81,57 +117,68 @@ def SearchAbstract():
         input_source.clear()
     if not input_source:
         input_source.append('All')
-    ret = Search(input_string, input_source=input_source, type="abstract")
+    global ret_list
+    ret_list = Search(input_string, input_source=input_source, type="abstract")
+    global i
+    global length
+    length = len(ret_list)
+    i = 0
+    NextPage()
 
+
+
+
+ret_list_comment = []
+i_comment = 0
+length_comment = 0
+
+def NextPageComment():
+    # ==============================================
+    global i_comment
+    global length_comment
+
+    i_comment = i_comment+1
+    content = ret_list_comment[(i_comment-1)%length_comment]
     #output window
     title = tk.Label(window, text = "Title", font = ('Times', '10', 'bold'))
-    title.place(x = 400, y = 10)
+    title.place(x = 400, y = 350)
     title_text = tk.Text(window, height = 2)
-    title_text.insert('insert', ret[0])
-    title_text.place(x = 400, y = 30)
+    title_text.insert('insert', content['title'])
+    title_text.place(x = 400, y = 370)
 
 
     author = tk.Label(window, text = "Author", font = ('Times', '10', 'bold'))
-    author.place(x = 550, y = 10)
+    author.place(x = 400, y = 400)
     author_text = tk.Text(window, height = 2)
-    author_text.insert('insert', ret[1])
-    author_text.place(x = 550, y = 30)
+    author_text.insert('insert', content['authors'])
+    author_text.place(x = 400, y = 420)
 
-
+    abstract = tk.Label(window, text="Abstract", font=('Times', '10', 'bold'))
+    abstract.place(x=400, y=450)
     output = ScrolledText()
-    output.config(width = 80, height = 20)
-    output.place(x = 400, y = 100)
-    output.insert('insert', ret[2])
+    output.config(width = 80, height = 12)
+    output.place(x = 400, y = 470)
+    output.insert('insert', content['abstract'])
 
-
+    # ====下一页按钮========
+    button_next = tk.Button(window, text='next', command=NextPageComment)
+    button_next.place(x=940, y=300)
 
 def SearchComment():
     input_string = InputKeyword.get()
-    ret = Search(input_string, type="comment")
+    global ret_list_comment
+    ret_list_comment = Search(input_string, type="comment")
     # output window
-    title = tk.Label(window, text = "Title", font = ('Times', '10', 'bold'))
-    title.place(x = 400, y = 400)
-    title_text = tk.Text(window, height = 2)
-    title_text.insert('insert', ret[0])
-    title_text.place(x = 400, y = 420)
-
-
-    author = tk.Label(window, text = "Author", font = ('Times', '10', 'bold'))
-    author.place(x = 550, y = 400)
-    author_text = tk.Text(window, height = 2)
-    author_text.insert('insert', ret[1])
-    author_text.place(x = 550, y = 420)
-
-
-    output = ScrolledText()
-    output.config(width=80, height=20)
-    output.place(x=400, y=450)
-    output.insert('insert', ret[2])
+    global i_comment
+    global length_comment
+    length_comment = len(ret_list_comment)
+    i_comment = 0
+    NextPageComment()
 
 
 # ===============图片===================
 
-# ===误删，为了gui的正常运行，先给image赋予默认值=====
+# ===勿删，为了gui的正常运行，先给image赋予默认值=====
 image1 = Image.open('image2.jpg')
 render1 = ImageTk.PhotoImage(image1)
 image2 = Image.open('image2.jpg')
@@ -158,15 +205,14 @@ def DataAnalysis():
     top.title("keyword")
     top.geometry('600x400')
     # =========image 2============
-    input_string1 = InputKeyword.get()
     # file_name = 'image1.jpg'  # 测试使用的
     file_name2 = file_name_list[1]
     global image2
     global render2
     image2 = Image.open(file_name2)
     render2 = ImageTk.PhotoImage(image2)
-    img1 = tk.Label(top, image=render2, anchor = 'nw')
-    img1.place(x=10, y=10)
+    img2 = tk.Label(top, image=render2, anchor = 'nw')
+    img2.place(x=10, y=10)
 
 
 button_1 = tk.Button(window, text = '搜索摘要', command = SearchAbstract)
