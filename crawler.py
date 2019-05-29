@@ -77,6 +77,7 @@ class Search(object):
         for result in results:
             result['abstract'] = result.pop('summary')
             result['comment'] = ''
+            result['authors'] = ' '.join([x['name'] for x in result.pop('authors')])
         return results
 
 def query(search_query="", id_list=[], max_results=None, sort_by="relevance", sort_order="descending", max_chunk_results=1000):
