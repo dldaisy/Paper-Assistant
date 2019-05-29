@@ -81,21 +81,52 @@ def SearchAbstract():
         input_source.clear()
     if not input_source:
         input_source.append('All')
-    text = Search(input_string, input_source=input_source, type="abstract")
+    ret = Search(input_string, input_source=input_source, type="abstract")
+
     #output window
+    title = tk.Label(window, text = "Title", font = ('Times', '10', 'bold'))
+    title.place(x = 400, y = 10)
+    title_text = tk.Text(window, height = 2)
+    title_text.insert('insert', ret[0])
+    title_text.place(x = 400, y = 30)
+
+
+    author = tk.Label(window, text = "Author", font = ('Times', '10', 'bold'))
+    author.place(x = 550, y = 10)
+    author_text = tk.Text(window, height = 2)
+    author_text.insert('insert', ret[1])
+    author_text.place(x = 550, y = 30)
+
+
     output = ScrolledText()
     output.config(width = 80, height = 20)
     output.place(x = 400, y = 100)
-    output.insert('insert', text)
+    output.insert('insert', ret[2])
+
+
 
 def SearchComment():
     input_string = InputKeyword.get()
-    text = Search(input_string, type="comment")
+    ret = Search(input_string, type="comment")
     # output window
+    title = tk.Label(window, text = "Title", font = ('Times', '10', 'bold'))
+    title.place(x = 400, y = 400)
+    title_text = tk.Text(window, height = 2)
+    title_text.insert('insert', ret[0])
+    title_text.place(x = 400, y = 420)
+
+
+    author = tk.Label(window, text = "Author", font = ('Times', '10', 'bold'))
+    author.place(x = 550, y = 400)
+    author_text = tk.Text(window, height = 2)
+    author_text.insert('insert', ret[1])
+    author_text.place(x = 550, y = 420)
+
+
     output = ScrolledText()
     output.config(width=80, height=20)
-    output.place(x=400, y=400)
-    output.insert('insert', text)
+    output.place(x=400, y=450)
+    output.insert('insert', ret[2])
 
 
 # ===============图片===================
