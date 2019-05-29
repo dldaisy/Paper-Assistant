@@ -1,18 +1,18 @@
-# Example: 
+# Example:
 # from crawler import query
 # results = query(search_query="quantum", max_chunk_results=1, max_results=5)
 # for result in results:
 #     print(result)
 # acm:
-# from crawler_acm import get_acm
-#     results = get_acm(100)
+# from crawler import get_acm
+# results = get_acm(100)
 # for result in results:
 #     print(result)
 
 import csv
 import feedparser
 from urllib.parse import urlencode
-from urllib.request import urlretrieve
+from urllib.request import urlretrieve, install_opener, build_opener
 
 class Search(object):
     root_url = 'http://export.arxiv.org/api/'
@@ -30,7 +30,7 @@ class Search(object):
         if not self.max_results:
             print('No maximal number of results given by the user. Download all')
             self.max_results = float('inf')
-            
+
     def _get_url(self, start=0, max_results=None):
 
         url_args = urlencode(
@@ -62,7 +62,7 @@ class Search(object):
         start = 0
 
         while n_left > 0:
-            
+
             url = self._get_url( start=start, max_results=min(n_left, self.max_chunk_results))
             results = self._parse(url)
             n_fetched = len(results)
@@ -104,6 +104,9 @@ def get_acm(max_results=None):
     filename='acm_kbart.csv'
     keys = []
     results = []
+    opener=build_opener()
+    opener.addheaders=[('User-Agent','Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36')]
+    install_opener(opener)
     urlretrieve(csv_url, filename)
     with open(filename, mode='r') as csv_file:
         csv_reader = csv.DictReader(csv_file)
