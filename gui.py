@@ -4,6 +4,7 @@ from PIL import Image, ImageTk
 
 from search import search
 from analyze import field_analyze
+from search import paper_recommend
 
 
 
@@ -153,16 +154,16 @@ def NextPageComment():
     author_text.insert('insert', content['authors'])
     author_text.place(x = 400, y = 420)
 
-    abstract = tk.Label(window, text="Abstract", font=('Times', '10', 'bold'))
+    abstract = tk.Label(window, text="Comment", font=('Times', '10', 'bold'))
     abstract.place(x=400, y=450)
     output = ScrolledText()
     output.config(width = 80, height = 12)
     output.place(x = 400, y = 470)
-    output.insert('insert', content['abstract'])
+    output.insert('insert', content['comment'])
 
     # ====下一页按钮========
     button_next = tk.Button(window, text='next', command=NextPageComment)
-    button_next.place(x=940, y=300)
+    button_next.place(x=940, y=640)
 
 def SearchComment():
     input_string = InputKeyword.get()
@@ -228,7 +229,14 @@ button_3.place(x = 170, y =400)
 #=============推荐信箱===================
 
 def ReceiveReference():
-    pass
+    global ret_list
+    ret_list = paper_recommend(5)
+    global i
+    i = 0
+    global length
+    length = len(ret_list)
+    NextPage()
+
 
 load = Image.open('mailbox.jpg')
 w, h = load.size
