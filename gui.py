@@ -99,12 +99,10 @@ def SearchComment():
 
 
 # ===============图片===================
-input_string1 = InputKeyword.get()
-#file_name = 'image1.jpg'  # 测试使用的
-file_name = Search_Analysis(input_string1)
-image1 = Image.open(file_name)
-render1 = ImageTk.PhotoImage(image1)
 
+# ===误删，为了gui的正常运行，先给image赋予默认值=====
+image1 = Image.open('image2.jpg')
+render1 = ImageTk.PhotoImage(image1)
 
 def DataAnalysis():
     # 使用canvas显示image
@@ -113,6 +111,13 @@ def DataAnalysis():
     top.title("分析图表")
     top.geometry('600x400')
     # =========image 1============
+    input_string1 = InputKeyword.get()
+    file_name = 'image1.jpg'  # 测试使用的
+    #file_name = Search_Analysis(input_string1)
+    global image1
+    global render1
+    image1 = Image.open(file_name)
+    render1 = ImageTk.PhotoImage(image1)
     img1 = tk.Label(top, image = render1)
     img1.place(x=10, y=10)
 
