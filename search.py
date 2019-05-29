@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from math import log
+from pprint import pprint
 
+from base import get_paper_list, filter
 """
 
 对外接口 ： search(paper_list, type=None)
@@ -10,40 +12,7 @@ from math import log
         - type          :   "abstract" , "comment"
 """
 
-# 外部接口
-
-def get_paper_list():
-    # 待爬虫模块实现接口
-    # 目前为测试列表
-    test_list = [
-        {
-            "title" : "4 abc cc dcv df er df",
-            "abstract" : "4 abc cc dcv df er df",
-            "authors" : "abc dfr sfr vcxs dfr" ,
-            "keyword" : "abc dfr sfr vcxs dfr" ,
-            "source" : "ACM" ,
-            "comment" : "sd wer avc abc "        
-        },    
-        {
-            "title" : "7 abc cc dcv df er df",
-            "abstract" : "7 abc cc dcv df er df",
-            "authors" : "abc abc sfr vcxs dfr" ,
-            "keyword" : "abc abc sfr vcxs dfr" ,
-            "source" : "IEEE" ,
-            "comment" : "abc wer avc abc "        
-        },    
-        {
-            "title" : "5 abc abc cc dcv df er df",
-            "abstract" : "5 abc abc cc dcv df er df",
-            "authors" : "abc dfr sfr vcxs dfr" ,
-            "keyword" : "abc dfr sfr vcxs dfr" ,
-            "source" : "Arxiv" ,
-            "comment" : "sd wer avc abc "        
-        }
-    ]
-    
-    return test_list
-    
+# 外部接口    
 def search(words, input_source=["All"], type=None):
     """
     返回需要显示的文本
@@ -55,11 +24,9 @@ def search(words, input_source=["All"], type=None):
         - "comment"  :  返回标题、作者、评论
     """
 
-    words = words.split()
-    print(words)
-    
-    paper_list = get_paper_list()
-    paper_list = filter_source(paper_list, input_source)
+    paper_list = get_paper_list(words)
+    words = words.split()    
+    # paper_list = filter_source(paper_list, input_source)
     
     count = 10                  # 最多显示的论文数
     
@@ -70,12 +37,12 @@ def search(words, input_source=["All"], type=None):
     show_list = []
     for paper in paper_list[0:show_len]:
         show_paper = []
-        show_paper.append("title:\t\t"+paper["title"])
-        show_paper.append("author:\t\t"+paper["authors"])
+        show_paper.append("title:\n\t"+paper["title"])
+        show_paper.append("author:\n\t"+paper["authors"])
         if type=="abstract":
-            show_paper.append("abstract:\t\t"+paper["abstract"])
+            show_paper.append("abstract:\n\t"+paper["abstract"])
         elif type=="comment":
-            show_paper.append("commment:\t\t"+paper["comment"])
+            show_paper.append("commment:\n\t"+paper["comment"])
         show_str = '\n'.join(show_paper)
         show_list.append(show_str)
     return '\n\n'.join(show_list)
@@ -92,6 +59,8 @@ def pre_score(paper_list, words):
     
     for paper in paper_list: 
         for _, value in paper.items():
+            if not isinstance(value, str):
+                continue
             for word in words:
                 rtn += value.count(word) 
     
@@ -114,6 +83,8 @@ def score(paper_list, words):
         IDF = 0 
         for word in words:
             for _, value in paper.items():
+                if not isinstance(value, str):                      # 如果不是字符串，忽略
+                    continue
                 TF = value.count(word) 
                 IDF += TF
         score_list.append(IDF) 
@@ -129,9 +100,6 @@ def sort_paper(paper_list, words):
     paper_list.sort(key=lambda paper : paper["score"], reverse=False)
 
 # 筛选、过滤
-
-def filter(paper_list, func):
-    return [paper for paper in paper_list if func(paper)]
     
 def filter_source(paper_list, values):
     """

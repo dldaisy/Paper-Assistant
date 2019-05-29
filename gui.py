@@ -112,8 +112,8 @@ def DataAnalysis():
     top.geometry('600x400')
     # =========image 1============
     input_string1 = InputKeyword.get()
-    file_name = 'image1.jpg'  # 测试使用的
-    #file_name = Search_Analysis(input_string1)
+    # file_name = 'image1.jpg'  # 测试使用的
+    file_name = Search_Analysis(input_string1)
     global image1
     global render1
     image1 = Image.open(file_name)

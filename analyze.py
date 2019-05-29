@@ -1,50 +1,26 @@
 from datetime import datetime
+from wordcloud import WordCloud
+from pprint import pprint
+
 import matplotlib.pyplot as plt
 
-# 外部接口
-
-def get_paper_list():
-    # 待爬虫模块实现接口
-    # 目前为测试列表
-    test_list = [
-        {
-            "title" : "4 abc cc dcv df er df",
-            "authors" : "abc dfr sfr vcxs dfr" ,
-            "keyword" : "abc AI network security" ,
-            "source" : "ACM" ,
-            "comment" : "sd wer avc abc "        
-        },    
-        {
-            "title" : "7 abc cc dcv df er df",
-            "authors" : "abc abc sfr vcxs dfr" ,
-            "keyword" : "abc hardware security" ,
-            "source" : "IEEE" ,
-            "comment" : "abc wer avc abc "        
-        },    
-        {
-            "title" : "5 abc abc cc dcv df er df",
-            "authors" : "abc dfr sfr vcxs dfr" ,
-            "keyword" : "abc AI software IoT" ,
-            "source" : "Arxiv" ,
-            "comment" : "sd wer avc abc "        
-        }
-    ]
-    
-    return test_list
+from base import get_paper_list, filter
 
 def field_analyze(word):
     """
     领域分析：对给定的关键字，返回所有含有该关键字的论文的其他关键字的饼状图
     """
-    paper_list = get_paper_list()
+    paper_list = get_paper_list(word,max_cnt=10)
+    # pprint(paper_list)
     
     key_counts = {}
     for paper in paper_list: 
-        keywords = paper["keyword"].split()
-        
-        # keywords = set(keywords)                最后看性能有没有必要
-        if word not in keywords:
-            continue 
+        ## 现在使用title 分词模拟关键字列表
+        keywords = paper["title"].split()
+        keywords = filter_by_len(keywords, 4)
+        # 如果按关键字的话，这里本来是筛掉一部分的
+        # if word not in keywords:
+            # continue 
         
         # 存在该关键字，遍历关键字 
         for keyword in keywords:
@@ -58,11 +34,18 @@ def field_analyze(word):
     if not key_counts:
         raise NoKeywordError(word) 
     
-    return draw_pie_chart(key_counts)
+    # 标准化频率 
+    count_sum = sum(key_counts.values()) 
+    for _,value in key_counts.items():
+        value = value / count_sum
+    
+    pie_chart = gen_pie_chart(key_counts)
+    word_cloud = gen_word_cloud(key_counts)
+    return [pie_chart, word_cloud]
 
 #绘图
 
-def draw_pie_chart(some_counts):
+def gen_pie_chart(some_counts):
     """
     绘制饼状图
     params:
@@ -90,6 +73,37 @@ def draw_pie_chart(some_counts):
     
     return filename
 
+# word cloud display 
+
+def gen_word_cloud(some_counts):
+
+    # Generate a word cloud image
+    wordcloud = WordCloud().generate_from_frequencies(some_counts)
+
+    plt.imshow(wordcloud, interpolation='bilinear')
+    plt.axis("off")
+
+    fig_dir = "images/"
+    suffix = datetime.now().isoformat(timespec='seconds')
+    suffix = suffix.replace(":", "-")
+    filename = fig_dir + "wordcloud-" + suffix + ".png"
+    plt.savefig(filename, dpi=300)
+
+    return filename
+
+
+# 筛选 
+
+def filter_by_len(target_list, length):
+    """
+    length  :  max length
+    """    
+    def func(element):
+        return len(element) >= length
+        
+    return filter(target_list, func)
+
+
 class error(Exception):
     def __init__(self, message=None):
         if not message:
@@ -105,8 +119,6 @@ class NoKeywordError(error):
         super(NoKeywordError, self).__init__(message="There is no paper with keyword %s" % word)
         
         
-# 测试
-
-# key_counts = field_analyze("abc")
-# test = draw_pie_chart(key_counts)
-# print(test)
+# word = "computer"
+# filename = field_analyze(word)
+# print(filename)
