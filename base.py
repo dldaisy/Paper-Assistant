@@ -10,6 +10,6 @@ def get_paper_list(words, max_cnt=20):
     """
     result = []
     
-    result = query(search_query=words, max_chunk_results=1, max_results=max_cnt)
+    result = query(search_query=words, max_chunk_results=10, max_results=max_cnt)
     
     return result
