@@ -18,11 +18,12 @@ def field_analyze(word):
         ## 现在使用title 分词模拟关键字列表
         keywords = paper["title"].split()
         keywords = filter_by_len(keywords, 4)
+        keywords = [keyword.lower() for keyword in keywords]
         # 如果按关键字的话，这里本来是筛掉一部分的
         # if word not in keywords:
             # continue 
         
-        # 存在该关键字，遍历关键字 
+        # 存在该关键字，遍历关键        
         for keyword in keywords:
             if keyword == word :
                 continue
@@ -33,11 +34,6 @@ def field_analyze(word):
         
     if not key_counts:
         raise NoKeywordError(word) 
-    
-    # 标准化频率 
-    # count_sum = sum(key_counts.values()) 
-    # for _,value in key_counts.items():
-        # value = value / count_sum
     
     pie_chart = gen_pie_chart(key_counts)
     word_cloud = gen_word_cloud(key_counts)
@@ -68,8 +64,9 @@ def gen_pie_chart(some_counts):
     
     suffix = datetime.now().isoformat(timespec='seconds')
     suffix = suffix.replace(":", "-")
-    filename = fig_dir + "pie-" + suffix + ".jpg"
-    plt.savefig(filename, dpi=300)
+    filename = fig_dir + "pie-" + suffix + ".png"
+    plt.savefig(filename, dpi=100)
+    plt.clf()
     
     return filename
 
@@ -87,7 +84,8 @@ def gen_word_cloud(some_counts):
     suffix = datetime.now().isoformat(timespec='seconds')
     suffix = suffix.replace(":", "-")
     filename = fig_dir + "wordcloud-" + suffix + ".png"
-    plt.savefig(filename, dpi=300)
+    plt.savefig(filename, dpi=100)
+    plt.clf()
 
     return filename
 

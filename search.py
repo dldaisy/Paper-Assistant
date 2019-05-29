@@ -15,6 +15,10 @@ from base import get_paper_list, filter
 history = {}
 
 # 外部接口    
+# =============
+# 搜索
+# =============
+
 def search(words, input_source=["All"], type=None):
     """
     返回需要显示的文本
@@ -38,6 +42,29 @@ def search(words, input_source=["All"], type=None):
     
     # 返回结果
     return get_show_list(paper_list, type=type)
+
+# ============ 
+# 智能推送 
+# ============
+
+def paper_recommend(history, max_keywords=5):
+    """
+    选择不超过5个的频率最高的关键字进行搜索
+    """
+
+    max_cnt = min(max_keywords, len(history))
+    keys = [] 
+    
+    min_freq = 0.5                      # 只保留大于min_freq的关键字
+    while len(keys) < max_cnt:
+        for key,value in history.items(): 
+            if value >= min_freq:
+                keys.append(key)
+    
+    return search(keys) 
+
+
+# =================================================分割线========================================================
 
 # 评分
 def pre_score(paper_list, words):
@@ -86,18 +113,12 @@ def score(paper_list, words):
     for paper, score in zip(paper_list, score_list):
         paper["score"] = score 
 
-# =======
 # 排序
-# =======
-
 def sort_paper(paper_list, words):    
     score(paper_list, words)
     paper_list.sort(key=lambda paper : paper["score"], reverse=False)
     
-# =============
 # 筛选、过滤
-# =============
-    
 def filter_source(paper_list, values):
     """
     values  :  list of str
@@ -111,43 +132,16 @@ def filter_source(paper_list, values):
     return filter(paper_list, func)
 
 
-# ============
 #   历史记录
-# ============ 
-
-def history_record(word, history=None):
-    if not history:
-        history = {} 
-        
+def history_record(word, history):        
     if word in history:
         history[word] += 1 
     else :
         history[word] = 1 
-
-# ============ 
-# 智能推送 
-# ============
-
-def paper_recommend(history, max_keywords=5):
-    """
-    选择不超过5个的频率最高的关键字进行搜索
-    """
-
-    max_cnt = min(max_keywords, len(history))
-    keys = [] 
     
-    min_freq = 0.5                      # 只保留大于min_freq的关键字
-    while len(keys) < max_cnt:
-        for key,value in history.items(): 
-            if value >= min_freq:
-                keys.append(key)
-    
-    return search(keys) 
+    print(history)
 
-# ============
 # 显示 
-# ============
-
 def get_show_list(paper_list, type=None, max_len=10):
     paper_list_len = len(paper_list)
     show_len = min(max_len, paper_list_len)
@@ -171,6 +165,7 @@ def get_show_list(paper_list, type=None, max_len=10):
     
     return rtn 
 
+
 ## 模块异常
 ## 为了gui接口正常工作，没有把异常加进去
 ## 如果需要可以添加无结果异常
@@ -189,6 +184,3 @@ class NoPaperMatchedError(error):
     def __init__(self):
         super(NoPaperMatchedError, self).__init__(message="There is no paper matched")
     
-
-# res = search("computer", type="abstract")
-# pprint(res)
