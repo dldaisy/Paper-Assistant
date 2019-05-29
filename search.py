@@ -34,9 +34,10 @@ def search(words, input_source=["All"], type=None):
     words = words.split()    
     # paper_list = filter_source(paper_list, input_source)
     
-    # 把关键字加入历史 
+    # 把关键字加入历史
+    global history
     for word in words:
-        history_record(word, history)
+        history_record(word)
     # 结果排序
     sort_paper(paper_list, words) 
     
@@ -47,11 +48,11 @@ def search(words, input_source=["All"], type=None):
 # 智能推送 
 # ============
 
-def paper_recommend(history, max_keywords=5):
+def paper_recommend(max_keywords=5):
     """
     选择不超过5个的频率最高的关键字进行搜索
     """
-
+    global history
     max_cnt = min(max_keywords, len(history))
     keys = [] 
     
@@ -133,7 +134,8 @@ def filter_source(paper_list, values):
 
 
 #   历史记录
-def history_record(word, history):        
+def history_record(word):
+    global history
     if word in history:
         history[word] += 1 
     else :
