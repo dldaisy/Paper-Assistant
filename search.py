@@ -12,6 +12,8 @@ from base import get_paper_list, filter
         - type          :   "abstract" , "comment"
 """
 
+history = {}
+
 # 外部接口    
 def search(words, input_source=["All"], type=None):
     """
@@ -28,27 +30,16 @@ def search(words, input_source=["All"], type=None):
     words = words.split()    
     # paper_list = filter_source(paper_list, input_source)
     
-    count = 10                  # 最多显示的论文数
-    
+    # 把关键字加入历史 
+    for word in words:
+        history_record(word, history)
+    # 结果排序
     sort_paper(paper_list, words) 
-    paper_list_len = len(paper_list)
-    show_len = min(count, paper_list_len)
+    
+    # 返回结果
+    return get_show_list(paper_list, type=type)
 
-    show_list = []
-    for paper in paper_list[0:show_len]:
-        show_paper = []
-        show_paper.append("title:\n\t"+paper["title"])
-        show_paper.append("author:\n\t"+paper["authors"])
-        if type=="abstract":
-            show_paper.append("abstract:\n\t"+paper["abstract"])
-        elif type=="comment":
-            show_paper.append("commment:\n\t"+paper["comment"])
-        show_str = '\n'.join(show_paper)
-        show_list.append(show_str)
-    return '\n\n'.join(show_list)
-
-# 评分、排序
-
+# 评分
 def pre_score(paper_list, words):
     """
     获取DF参数
@@ -95,11 +86,17 @@ def score(paper_list, words):
     for paper, score in zip(paper_list, score_list):
         paper["score"] = score 
 
+# =======
+# 排序
+# =======
+
 def sort_paper(paper_list, words):    
     score(paper_list, words)
     paper_list.sort(key=lambda paper : paper["score"], reverse=False)
-
+    
+# =============
 # 筛选、过滤
+# =============
     
 def filter_source(paper_list, values):
     """
@@ -112,6 +109,67 @@ def filter_source(paper_list, values):
         return paper["source"] in values
         
     return filter(paper_list, func)
+
+
+# ============
+#   历史记录
+# ============ 
+
+def history_record(word, history=None):
+    if not history:
+        history = {} 
+        
+    if word in history:
+        history[word] += 1 
+    else :
+        history[word] = 1 
+
+# ============ 
+# 智能推送 
+# ============
+
+def paper_recommend(history, max_keywords=5):
+    """
+    选择不超过5个的频率最高的关键字进行搜索
+    """
+
+    max_cnt = min(max_keywords, len(history))
+    keys = [] 
+    
+    min_freq = 0.5                      # 只保留大于min_freq的关键字
+    while len(keys) < max_cnt:
+        for key,value in history.items(): 
+            if value >= min_freq:
+                keys.append(key)
+    
+    return search(keys) 
+
+# ============
+# 显示 
+# ============
+
+def get_show_list(paper_list, type=None, max_len=10):
+    paper_list_len = len(paper_list)
+    show_len = min(max_len, paper_list_len)
+    
+    key_list = []
+    if not type:
+        key_list = ["title", "authors"]
+    elif type=="abstract":
+        key_list = ["title", "authors", "abstract"]
+    elif type=="comment":
+        key_list = ["title", "authors", "comment"]
+    elif type=="recommend":
+        key_list = ["title", "authors"]
+    
+    rtn = []
+    for paper in paper_list[:show_len]:
+        temp = {}
+        for key in key_list:
+            temp[key] = paper[key]
+        rtn.append(temp) 
+    
+    return rtn 
 
 ## 模块异常
 ## 为了gui接口正常工作，没有把异常加进去
@@ -132,6 +190,5 @@ class NoPaperMatchedError(error):
         super(NoPaperMatchedError, self).__init__(message="There is no paper matched")
     
 
-## 测试    
-# res = search("abc", type="comment")
-# print(res)
+# res = search("computer", type="abstract")
+# pprint(res)

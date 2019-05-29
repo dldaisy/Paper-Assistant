@@ -35,9 +35,9 @@ def field_analyze(word):
         raise NoKeywordError(word) 
     
     # 标准化频率 
-    count_sum = sum(key_counts.values()) 
-    for _,value in key_counts.items():
-        value = value / count_sum
+    # count_sum = sum(key_counts.values()) 
+    # for _,value in key_counts.items():
+        # value = value / count_sum
     
     pie_chart = gen_pie_chart(key_counts)
     word_cloud = gen_word_cloud(key_counts)
