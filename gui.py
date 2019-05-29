@@ -103,22 +103,38 @@ def SearchComment():
 # ===误删，为了gui的正常运行，先给image赋予默认值=====
 image1 = Image.open('image2.jpg')
 render1 = ImageTk.PhotoImage(image1)
-
+image2 = Image.open('image2.jpg')
+render2 = ImageTk.PhotoImage(image2)
 def DataAnalysis():
     # 使用canvas显示image
 
     top = tk.Toplevel()
-    top.title("分析图表")
+    top.title("piechart")
     top.geometry('600x400')
     # =========image 1============
     input_string1 = InputKeyword.get()
+    file_name_list = Search_Analysis(input_string1)
     # file_name = 'image1.jpg'  # 测试使用的
-    file_name = Search_Analysis(input_string1)
     global image1
     global render1
-    image1 = Image.open(file_name)
+    file_name1 = file_name_list[0]
+    image1 = Image.open(file_name1)
     render1 = ImageTk.PhotoImage(image1)
-    img1 = tk.Label(top, image = render1)
+    img1 = tk.Label(top, image = render1, anchor = 'nw')
+    img1.place(x=10, y=10)
+
+    top = tk.Toplevel()
+    top.title("keyword")
+    top.geometry('600x400')
+    # =========image 2============
+    input_string1 = InputKeyword.get()
+    # file_name = 'image1.jpg'  # 测试使用的
+    file_name2 = file_name_list[1]
+    global image2
+    global render2
+    image2 = Image.open(file_name2)
+    render2 = ImageTk.PhotoImage(image2)
+    img1 = tk.Label(top, image=render2, anchor = 'nw')
     img1.place(x=10, y=10)
 
 
