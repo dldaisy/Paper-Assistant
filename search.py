@@ -139,8 +139,6 @@ def history_record(word, history):
     else :
         history[word] = 1 
     
-    print(history)
-
 # 显示 
 def get_show_list(paper_list, type=None, max_len=10):
     paper_list_len = len(paper_list)
