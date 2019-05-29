@@ -1,10 +1,10 @@
-# Example: 
+# Example:
 # from crawler import query
 # results = query(search_query="quantum", max_chunk_results=1, max_results=5)
 # for result in results:
 #     print(result)
 # acm:
-# from crawler_acm import get_acm
+# from crawler import get_acm
 #     results = get_acm(100)
 # for result in results:
 #     print(result)
@@ -30,7 +30,7 @@ class Search(object):
         if not self.max_results:
             print('No maximal number of results given by the user. Download all')
             self.max_results = float('inf')
-            
+
     def _get_url(self, start=0, max_results=None):
 
         url_args = urlencode(
@@ -62,7 +62,7 @@ class Search(object):
         start = 0
 
         while n_left > 0:
-            
+
             url = self._get_url( start=start, max_results=min(n_left, self.max_chunk_results))
             results = self._parse(url)
             n_fetched = len(results)
