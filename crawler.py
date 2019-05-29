@@ -3,7 +3,13 @@
 # results = query(search_query="quantum", max_chunk_results=1, max_results=5)
 # for result in results:
 #     print(result)
+# acm:
+# from crawler_acm import get_acm
+#     results = get_acm(100)
+# for result in results:
+#     print(result)
 
+import csv
 import feedparser
 from urllib.parse import urlencode
 from urllib.request import urlretrieve
@@ -77,7 +83,7 @@ class Search(object):
         for result in results:
             result['abstract'] = result.pop('summary')
             result['comment'] = ''
-            result['authors'] = ' '.join([x['name'] for x in result.pop('authors')])
+            result['authors'] = ','.join([x['name'] for x in result.pop('authors')])
         return results
 
 def query(search_query="", id_list=[], max_results=None, sort_by="relevance", sort_order="descending", max_chunk_results=1000):
@@ -91,3 +97,20 @@ def query(search_query="", id_list=[], max_results=None, sort_by="relevance", so
         max_chunk_results=max_chunk_results)
 
     return search.crawl()
+
+def get_acm(max_results=None):
+    csv_url = 'https://dl.acm.org/feeds/acm_kbart.csv'
+
+    filename='acm_kbart.csv'
+    keys = []
+    results = []
+    urlretrieve(csv_url, filename)
+    with open(filename, mode='r') as csv_file:
+        csv_reader = csv.DictReader(csv_file)
+        dict = {}
+        cnt = 0
+        for row in csv_reader:
+            for x in row.keys():
+                dict[x] = row[x]
+            results.append(dict)
+    return results
