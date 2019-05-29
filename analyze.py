@@ -1,7 +1,8 @@
 from datetime import datetime
 from wordcloud import WordCloud
-from pprint import pprint
+# from pprint import pprint
 
+import os
 import matplotlib.pyplot as plt
 
 from base import get_paper_list, filter
@@ -51,6 +52,8 @@ def gen_pie_chart(some_counts):
     """
     
     fig_dir = "images/"
+    if not os.path.exists(fig_dir):
+        os.makedirs(fig_dir)
     
     labels = []
     fracs = []
