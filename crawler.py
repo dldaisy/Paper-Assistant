@@ -5,14 +5,14 @@
 #     print(result)
 # acm:
 # from crawler import get_acm
-#     results = get_acm(100)
+# results = get_acm(100)
 # for result in results:
 #     print(result)
 
 import csv
 import feedparser
 from urllib.parse import urlencode
-from urllib.request import urlretrieve
+from urllib.request import urlretrieve, install_opener, build_opener
 
 class Search(object):
     root_url = 'http://export.arxiv.org/api/'
@@ -104,6 +104,9 @@ def get_acm(max_results=None):
     filename='acm_kbart.csv'
     keys = []
     results = []
+    opener=build_opener()
+    opener.addheaders=[('User-Agent','Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36')]
+    install_opener(opener)
     urlretrieve(csv_url, filename)
     with open(filename, mode='r') as csv_file:
         csv_reader = csv.DictReader(csv_file)
