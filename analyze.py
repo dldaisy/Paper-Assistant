@@ -12,8 +12,7 @@ def field_analyze(word):
     """
     领域分析：对给定的关键字，返回所有含有该关键字的论文的其他关键字的饼状图
     """
-    paper_list = get_paper_list(word,max_cnt=10)
-    # pprint(paper_list)
+    paper_list = get_paper_list(word, max_cnt=50)
     
     key_counts = {}
     for paper in paper_list: 

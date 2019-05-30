@@ -12,7 +12,7 @@ def get_paper_list(words, max_cnt=10):
     result = []
     
     # arxiv
-    temp = query(search_query=words, max_chunk_results=10, max_results=max_cnt)
+    temp = query(search_query=words, max_chunk_results=max_cnt, max_results=max_cnt)
     for paper in temp:
         paper["source"] = "arxiv" 
     result.extend(temp) 
