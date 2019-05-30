@@ -8,11 +8,16 @@
 # results = get_acm(100)
 # for result in results:
 #     print(result)
+# comments:
+# from crawler import get_comment
+# results = get_comment('quantum)
+# print(results.keys())
 
 import csv
 import feedparser
 from urllib.parse import urlencode
-from urllib.request import urlretrieve, install_opener, build_opener
+from urllib.request import urlretrieve, install_opener, build_opener, urlopen
+from bs4 import BeautifulSoup
 
 class Search(object):
     root_url = 'http://export.arxiv.org/api/'
@@ -97,6 +102,19 @@ def query(search_query="", id_list=[], max_results=None, sort_by="relevance", so
         max_chunk_results=max_chunk_results)
 
     return search.crawl()
+
+def get_comment(key=""):
+    url = 'https://www.guokr.com/search/all/?wd='+key
+    res = urlopen(url).read()
+    soup = BeautifulSoup(res, features="lxml")
+    essays = []
+    comments = {}
+    essay_list = soup.find_all("li", class_="items-post")
+    for i in essay_list:
+        essays.append(i.find_all("a")[0])
+    for k in essays:
+        comments[k.getText()] = 'https://www.guokr.com'+k.get('href', None)
+    return comments
 
 def get_acm(max_results=None):
     csv_url = 'https://dl.acm.org/feeds/acm_kbart.csv'
