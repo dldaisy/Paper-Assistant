@@ -33,7 +33,6 @@ def search(words, input_source=["All"], type=None):
 
     if type=='comment':
         comment_list = get_comment(words).keys()            # 获取评论
-        print(comment_list)
         return get_show_list(comment_list, type=type)
         
     paper_list = get_paper_list(words)
@@ -153,7 +152,7 @@ def get_show_list(paper_list, type=None, max_len=10):
     show_len = min(max_len, paper_list_len)
     
     if type=='comment':
-        return paper_list
+        return list(paper_list)
     
     key_list = []
     if not type:

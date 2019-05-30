@@ -106,7 +106,7 @@ def query(search_query="", id_list=[], max_results=None, sort_by="relevance", so
 def get_comment(key=""):
     url = 'https://www.guokr.com/search/all/?wd='+key
     res = urlopen(url).read()
-    soup = BeautifulSoup(res, features="html5lib")
+    soup = BeautifulSoup(res, features="lxml")
     essays = []
     comments = {}
     essay_list = soup.find_all("li", class_="items-post")
