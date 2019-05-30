@@ -164,29 +164,16 @@ def NextPageComment():
     # ==============================================
     global i_comment
     global length_comment
-
     i_comment = i_comment+1
     content = ret_list_comment[(i_comment-1)%length_comment]
     #output window
-    title = tk.Label(window, text = "Title", font = ('Times', '10', 'bold'))
-    title.place(x = 400, y = 350)
-    title_text = tk.Text(window, height = 2)
-    title_text.insert('insert', content['title'])
-    title_text.place(x = 400, y = 370)
-
-
-    author = tk.Label(window, text = "Author", font = ('Times', '10', 'bold'))
-    author.place(x = 400, y = 400)
-    author_text = tk.Text(window, height = 2)
-    author_text.insert('insert', content['authors'])
-    author_text.place(x = 400, y = 420)
 
     abstract = tk.Label(window, text="Comment", font=('Times', '10', 'bold'))
     abstract.place(x=400, y=450)
     output = ScrolledText()
     output.config(width = 80, height = 12)
     output.place(x = 400, y = 470)
-    output.insert('insert', content['comment'])
+    output.insert('insert', content)
 
     # ====下一页按钮========
     button_next = tk.Button(window, text='next', command=NextPageComment)
@@ -212,7 +199,6 @@ render1 = ImageTk.PhotoImage(image1)
 image2 = Image.open('image2.jpg')
 render2 = ImageTk.PhotoImage(image2)
 def DataAnalysis():
-    # 使用canvas显示image
 
     top = tk.Toplevel()
     top.title("piechart")
