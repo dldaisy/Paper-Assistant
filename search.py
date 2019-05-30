@@ -62,7 +62,7 @@ def paper_recommend(max_keywords=5):
             if value >= min_freq:
                 keys.append(key)
     
-    return search(' '.join(keys)) 
+    return search(' '.join(keys), type = 'recommend')
 
 
 # =================================================分割线========================================================
@@ -154,7 +154,7 @@ def get_show_list(paper_list, type=None, max_len=10):
     elif type=="comment":
         key_list = ["title", "authors", "comment"]
     elif type=="recommend":
-        key_list = ["title", "authors"]
+        key_list = ["title", "authors", "abstract"]
     
     rtn = []
     for paper in paper_list[:show_len]:

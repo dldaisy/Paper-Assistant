@@ -105,6 +105,8 @@ def NextPage():
     button_next = tk.Button(window, text='next', command=NextPage)
     button_next.place(x=940, y=300)
 
+num = 0
+recommend_string = tk.StringVar()
 def SearchAbstract():
     input_string = InputKeyword.get()
     input_source = []
@@ -124,6 +126,11 @@ def SearchAbstract():
     global length
     length = len(ret_list)
     i = 0
+
+    global num
+    num = 5
+    global recommend_string
+    recommend_string.set('check recommendation ' + str(num))
     NextPage()
 
 
@@ -228,13 +235,19 @@ button_3.place(x = 170, y =400)
 
 #=============推荐信箱===================
 
+
 def ReceiveReference():
     global ret_list
     ret_list = paper_recommend(5)
     global i
     i = 0
+
     global length
     length = len(ret_list)
+    global num
+    num = 0
+    global recommend_string
+    recommend_string.set('check recommendation ' + str(num))
     NextPage()
 
 
@@ -246,11 +259,9 @@ render = ImageTk.PhotoImage(load)
 img = tk.Label(window, image=render)
 img.place(x=10, y=550)
 
-num = 0
-button_recv = tk.Button(window, text = f'check mailbox {num}', command = ReceiveReference)
+recommend_string.set('check recommendation ' + str(num))
+button_recv = tk.Button(window, textvariable = recommend_string, command = ReceiveReference)
 button_recv.place(x = 10, y = 600)
-
-
 
 
 
