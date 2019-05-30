@@ -29,34 +29,54 @@ window.geometry('1000x800')
 
 
 # =========美工=============
-title = tk.Label(window, text = 'Paper Assistant', font = ('Times', '40', 'bold italic'))
-title.place(x = 10, y = 10)
+load_icon = Image.open('bookicon.jpg')
+w, h = load_icon.size
+load_icon.thumbnail((w/3, h/3))
+render_icon = ImageTk.PhotoImage(load_icon)
+
+img = tk.Label(window, image=render_icon, bg = '#ffffff', width = 380, anchor = 'nw')
+img.place(x=5, y=5)
+
+title = tk.Label(window, text = 'Paper Assistant', font = ('Comic Sans MS', '35', 'bold italic'), bg = '#ffffff', width = 13, anchor = 'nw')
+title.place(x = 5, y = 54)
 # =========输入框=================
-keyword = tk.Label(window, text = '关键字', bg = '#434343', fg = '#ffffff',anchor = 'nw')
+load_star1 = Image.open('star1.jpg')
+w, h = load_star1.size
+load_star1.thumbnail((w/6, h/6))
+render_star1 = ImageTk.PhotoImage(load_star1)
+
+img = tk.Label(window, image=render_star1, bg = '#ffffff')
+img.place(x=5, y=160)
+
+
+functions = tk.Label(window, text = ' 搜索选项', font = ('仿宋', '13', 'bold'), fg = '#000000',bg = '#ffffff', anchor = 'nw')
+functions.place(x = 25, y =160)
+
+keyword = tk.Label(window, text = 'Keyword', font = ('Cambria', '10', 'bold'), fg = '#000000',anchor = 'nw')
 keyword.place(x = 10, y =200)
-InputKeyword = tk.Entry(window)
-InputKeyword.place(x = 100, y = 200)
+InputKeyword = tk.Entry(window, width = 40)
+InputKeyword.place(x = 90, y = 200)
 
 #=========数据库选项==================
-range = tk.Label(window, text = '数据库', bg = '#434343', fg = '#ffffff',anchor = 'nw')
-range.place(x = 10, y =300)
+range = tk.Label(window, text = 'Database', font = ('Cambria', '10', 'bold'), fg = '#000000',anchor = 'nw')
+range.place(x = 10, y =250)
 
 
 var1 = tk.IntVar()
-check_1 = tk.Checkbutton(window, text = 'ACM', variable = var1, onvalue = 1, offvalue = 0)
-check_1.place(x = 100, y =300)
+check_1 = tk.Checkbutton(window, text = 'ACM', font = ('Comic Sans MS', '10', 'bold'), variable = var1, onvalue = 1, offvalue = 0)
+check_1.place(x = 100, y =250)
 
 var2 = tk.IntVar()
-check_2 = tk.Checkbutton(window, text = 'IEEE', variable = var2, onvalue = 1, offvalue = 0)
-check_2.place(x = 160, y =300)
+check_2 = tk.Checkbutton(window, text = 'IEEE', font = ('Comic Sans MS', '10', 'bold'), variable = var2, onvalue = 1, offvalue = 0)
+check_2.place(x = 160, y =250)
 
 var3 = tk.IntVar()
-check_3 = tk.Checkbutton(window, text = 'Arxiv', variable = var3, onvalue = 1, offvalue = 0)
-check_3.place(x = 220, y =300)
+check_3 = tk.Checkbutton(window, text = 'Arxiv', font = ('Comic Sans MS', '10', 'bold'), variable = var3, onvalue = 1, offvalue = 0)
+check_3.place(x = 220, y =250)
 
 var4 = tk.IntVar()
-check_4 = tk.Checkbutton(window, text = 'All', variable = var4, onvalue = 1, offvalue = 0)
-check_4.place(x = 280, y =300)
+check_4 = tk.Checkbutton(window, text = 'All', font = ('Comic Sans MS', '10', 'bold'), variable = var4, onvalue = 1, offvalue = 0)
+check_4.place(x = 280, y =250)
 
 
 #=========搜索选项======================
@@ -223,14 +243,29 @@ def DataAnalysis():
     img2.place(x=10, y=10)
 
 
-button_1 = tk.Button(window, text = '搜索摘要', command = SearchAbstract)
+
+load_star2 = Image.open('star2.jpg')
+w, h = load_star2.size
+load_star2.thumbnail((w/6, h/6))
+render_star2 = ImageTk.PhotoImage(load_star2)
+
+img = tk.Label(window, image=render_star2, bg = '#ffffff')
+img.place(x=5, y=370)
+
+
+functions2 = tk.Label(window, text = ' 功能选项', font = ('仿宋', '13', 'bold'), fg = '#000000',bg = '#ffffff', anchor = 'nw')
+
+functions2.place(x = 25, y =370)
+
+
+button_1 = tk.Button(window, text = '搜索摘要', font = ('仿宋', '12', 'bold'), command = SearchAbstract)
 button_1.place(x = 10, y =400)
 
-button_2 = tk.Button(window, text = '搜索评论', command = SearchComment)
-button_2.place(x = 90, y =400)
+button_2 = tk.Button(window, text = '搜索评论', font = ('仿宋', '12', 'bold'), command = SearchComment)
+button_2.place(x = 120, y =400)
 
-button_3 = tk.Button(window, text = '数据分析', command = DataAnalysis)
-button_3.place(x = 170, y =400)
+button_3 = tk.Button(window, text = '数据分析', font = ('仿宋', '12', 'bold'), command = DataAnalysis)
+button_3.place(x = 230, y =400)
 
 
 #=============推荐信箱===================
@@ -250,10 +285,19 @@ def ReceiveReference():
     recommend_string.set('check recommendation ' + str(num))
     NextPage()
 
+load_star3 = Image.open('star3.jpg')
+w, h = load_star3.size
+load_star3.thumbnail((w/6, h/6))
+render_star3 = ImageTk.PhotoImage(load_star3)
 
+img = tk.Label(window, image=render_star3, bg = '#ffffff')
+img.place(x=5, y=520)
+
+functions3 = tk.Label(window, text = ' 推荐论文', font = ('仿宋', '13', 'bold'), fg = '#000000',bg = '#ffffff', anchor = 'nw')
+functions3.place(x = 25, y =520)
 load = Image.open('mailbox.jpg')
 w, h = load.size
-load.thumbnail((w/10, h/10))
+load.thumbnail((w/5, h/5))
 render = ImageTk.PhotoImage(load)
 
 img = tk.Label(window, image=render)
@@ -261,7 +305,7 @@ img.place(x=10, y=550)
 
 recommend_string.set('check recommendation ' + str(num))
 button_recv = tk.Button(window, textvariable = recommend_string, command = ReceiveReference)
-button_recv.place(x = 10, y = 600)
+button_recv.place(x = 10, y = 630)
 
 
 
