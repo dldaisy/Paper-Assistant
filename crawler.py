@@ -105,7 +105,6 @@ def query(search_query="", id_list=[], max_results=None, sort_by="relevance", so
 
 def get_comment(key=""):
     url = 'https://www.guokr.com/search/all/?'+urlencode({"wd": key})
-    print(url)
     res = urlopen(url).read()
     soup = BeautifulSoup(res, features="lxml")
     essays = []
