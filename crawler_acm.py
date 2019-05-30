@@ -1,3 +1,9 @@
+# Example:
+# from crawler_acm import crawler
+# results = crawler(key='quantum', max_results=2)
+# for result in results:
+#     print(result)
+
 import feedparser
 from bs4 import BeautifulSoup
 from urllib.parse import urlencode, parse_qs, urlparse, urlunparse
@@ -59,14 +65,15 @@ def get_paper_info(url=None, title=None):
     comment = BeautifulSoup(tmp.read(), features=bs_feature)
     comments = comment.find_all('p')
     for i in comments:
-        comment_list.append(i.getText())
+        t = i.getText()
+        if t != "\nBe the first to comment\nTo Post a comment please sign in or create a free Web account\n":
+            comment_list.append(t)
     paper_info['comments'] = comment_list
 
     return paper_info
 
 def crawler(key=None, max_results=None):
     paper_list = get_paper_list(key, max_results)
-    print(paper_list)
     paper_infos = []
     cnt = 0
     for title in paper_list:
