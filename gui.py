@@ -123,7 +123,7 @@ def NextPage():
 
     # ====下一页按钮========
     button_next = tk.Button(window, text='next', command=NextPage)
-    button_next.place(x=940, y=300)
+    button_next.place(x=940, y=410)
 
 num = 0
 recommend_string = tk.StringVar()
@@ -169,17 +169,24 @@ def NextPageComment():
     #output window
 
 
-
     abstract = tk.Label(window, text="Comment", font=('Times', '10', 'bold'))
     abstract.place(x=400, y=450)
     output = ScrolledText()
-    output.config(width = 80, height = 12)
+    output.config(width = 80, height = 3)
     output.place(x = 400, y = 470)
-    output.insert('insert', content)
+    output.insert('insert', content['comment'])
+
+
+    url = tk.Label(window, text = "原文链接", font = ('Times', '10', 'bold'))
+    url.place(x = 400, y = 550)
+    url_text = tk.Text(window, height = 2)
+    url_text.insert('insert', content['url'])
+    url_text.place(x = 400, y = 570)
+
 
     # ====下一页按钮========
     button_next = tk.Button(window, text='next', command=NextPageComment)
-    button_next.place(x=940, y=640)
+    button_next.place(x=940, y=630)
 
 def SearchComment():
     input_string = InputKeyword.get()
