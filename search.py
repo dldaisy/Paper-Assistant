@@ -3,6 +3,7 @@ from math import log
 from pprint import pprint
 
 from base import get_paper_list, filter
+from crawler import get_comment
 """
 
 对外接口 ： search(paper_list, type=None)
@@ -30,6 +31,11 @@ def search(words, input_source=["All"], type=None):
         - "comment"  :  返回标题、作者、评论
     """
 
+    if type=='comment':
+        comment_list = get_comment(words).keys()            # 获取评论
+        print(comment_list)
+        return get_show_list(comment_list, type=type)
+        
     paper_list = get_paper_list(words)
     words = words.split()    
     # paper_list = filter_source(paper_list, input_source)
@@ -146,13 +152,14 @@ def get_show_list(paper_list, type=None, max_len=10):
     paper_list_len = len(paper_list)
     show_len = min(max_len, paper_list_len)
     
+    if type=='comment':
+        return paper_list
+    
     key_list = []
     if not type:
         key_list = ["title", "authors"]
     elif type=="abstract":
         key_list = ["title", "authors", "abstract"]
-    elif type=="comment":
-        key_list = ["title", "authors", "comment"]
     elif type=="recommend":
         key_list = ["title", "authors", "abstract"]
     
