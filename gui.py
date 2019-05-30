@@ -117,7 +117,7 @@ def NextPage():
     abstract = tk.Label(window, text="Abstract", font=('Times', '10', 'bold'))
     abstract.place(x=400, y=110)
     output = ScrolledText()
-    output.config(width = 80, height = 12)
+    output.config(width = 80, height = 20)
     output.place(x = 400, y = 130)
     output.insert('insert', content['abstract'])
 
@@ -167,6 +167,8 @@ def NextPageComment():
     i_comment = i_comment+1
     content = ret_list_comment[(i_comment-1)%length_comment]
     #output window
+
+
 
     abstract = tk.Label(window, text="Comment", font=('Times', '10', 'bold'))
     abstract.place(x=400, y=450)
