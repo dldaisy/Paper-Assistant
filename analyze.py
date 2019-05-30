@@ -3,6 +3,7 @@ from wordcloud import WordCloud
 # from pprint import pprint
 
 import os
+import re
 import matplotlib.pyplot as plt
 
 from base import get_paper_list, filter
@@ -17,8 +18,10 @@ def field_analyze(word):
     key_counts = {}
     for paper in paper_list: 
         ## 现在使用title 分词模拟关键字列表
-        keywords = paper["title"].split()
-        keywords = filter_by_len(keywords, 4)
+        data = paper["title"]
+        keywords = re.findall(r"[\w']+", data)
+
+        keywords = filter_by_len(keywords, 5)
         keywords = [keyword.lower() for keyword in keywords]
         # 如果按关键字的话，这里本来是筛掉一部分的
         # if word not in keywords:
@@ -42,7 +45,7 @@ def field_analyze(word):
 
 #绘图
 
-def gen_pie_chart(some_counts):
+def gen_pie_chart(some_counts, max_cnt=10):
     """
     绘制饼状图
     params:
@@ -57,9 +60,15 @@ def gen_pie_chart(some_counts):
     
     labels = []
     fracs = []
+    
+    cnt = 0
     for key, value in some_counts.items():
+        if cnt > max_cnt:
+            break
+        cnt += 1
         labels.append(key)
         fracs.append(value)
+        
     
     plt.axes(aspect=1)  # set this , Figure is round, otherwise it is an ellipse
     plt.pie(x=fracs, labels=labels, autopct='%3.1f %%',

@@ -1,4 +1,5 @@
 from crawler import query, get_acm
+from pprint import pprint 
 
 def filter(target_list, func):
     return [paper for paper in target_list if func(paper)]
@@ -18,6 +19,6 @@ def get_paper_list(words, max_cnt=10):
     
     # acm 
     # temp = get_acm(max_cnt) 
-    # print(len(temp))
+    # pprint(temp[:max_cnt])
     
     return result
