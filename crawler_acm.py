@@ -1,6 +1,6 @@
 import feedparser
 from bs4 import BeautifulSoup
-from urllib.parse import urlencode
+from urllib.parse import urlencode, parse_qs, urlparse
 from urllib.request import urlopen, install_opener, build_opener
 from time import sleep
 
@@ -28,5 +28,24 @@ def get_paper_list(key=None, max_result=20):
         cnt += 1
     return paper_url
 
-# def get_paper_list(url):
-        
+def get_paper_info(url):
+    paper_info = {}
+    arg = urlparse(url).query
+    args = parse_qs(arg)
+    urlargs = urlencode({"id": args['id'], "usebody": "tabbody"})
+    tmp = urlopen('https://dl.acm.org/tab_abstract.cfm?'+urlargs)
+    abstract = tmp.read()
+    paper_info['abstract'] = BeautifulSoup(abstract).text
+    tmp = urlopen('https://dl.acm.org/tab_comments.cfm?'+urlargs)
+    author_list = []
+    authors = tmp.read()
+    authors_part = BeautifulSoup(authors).find_all('strong')
+    for i in authors_part:
+        tmp = i.find_all('a')
+        if len(tmp) == 0:
+            continue
+        else:
+            tmp = tmp[0].getText()
+            if tmp != 'Bibliometrics':
+                author_list.append(tmp)
+    paper_info['authors'] = author_list
