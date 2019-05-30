@@ -62,7 +62,7 @@ def paper_recommend(max_keywords=5):
             if value >= min_freq:
                 keys.append(key)
     
-    return search(' '.join(keys)) 
+    return search(' '.join(keys), type = 'recommend')
 
 
 # =================================================分割线========================================================
