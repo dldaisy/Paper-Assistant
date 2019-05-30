@@ -28,8 +28,11 @@ def get_paper_list(key=None, max_result=20):
         cnt += 1
     return paper_url
 
-def get_paper_info(url):
+def get_paper_info(url=None, title=None):
+    if url == None:
+        return {}
     paper_info = {}
+    paper_info['title'] = title
     arg = urlparse(url).query
     args = parse_qs(arg)
     urlargs = urlencode({"id": args['id'], "usebody": "tabbody"})
@@ -49,3 +52,14 @@ def get_paper_info(url):
             if tmp != 'Bibliometrics':
                 author_list.append(tmp)
     paper_info['authors'] = author_list
+    tmp = urlopen('https://dl.acm.org/tab_comments.cfm?'+urlargs)
+    comment_list = []
+    comment = tmp.read()
+    comments = comment.find_all('p')
+    for i in comments:
+        comment_list.append(i.getText())
+    paper_info['comments'] = comment_list
+
+    return paper_info
+
+# def acm_crawler(key=None, max_results=None):
