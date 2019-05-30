@@ -3,11 +3,6 @@
 # results = query(search_query="quantum", max_chunk_results=1, max_results=5)
 # for result in results:
 #     print(result)
-# acm:
-# from crawler import get_acm
-# results = get_acm(100)
-# for result in results:
-#     print(result)
 # comments:
 # from crawler import get_comment
 # results = get_comment('quantum)
@@ -115,23 +110,3 @@ def get_comment(key=""):
     for k in essays:
         comments[k.getText()] = 'https://www.guokr.com'+k.get('href', None)
     return comments
-
-def get_acm(max_results=None):
-    csv_url = 'https://dl.acm.org/feeds/acm_kbart.csv'
-
-    filename='acm_kbart.csv'
-    keys = []
-    results = []
-    opener=build_opener()
-    opener.addheaders=[('User-Agent','Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36')]
-    install_opener(opener)
-    urlretrieve(csv_url, filename)
-    with open(filename, mode='r') as csv_file:
-        csv_reader = csv.DictReader(csv_file)
-        dict = {}
-        cnt = 0
-        for row in csv_reader:
-            for x in row.keys():
-                dict[x] = row[x]
-            results.append(dict)
-    return results
