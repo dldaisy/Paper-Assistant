@@ -253,6 +253,4 @@ button_recv.place(x = 10, y = 600)
 
 
 
-
-
 window.mainloop()
