@@ -174,7 +174,7 @@ def NextPageComment():
     output = ScrolledText()
     output.config(width = 80, height = 3)
     output.place(x = 400, y = 470)
-    output.insert('insert', content['comment'])
+    output.insert('insert', content['title'])
 
 
     url = tk.Label(window, text = "原文链接", font = ('Times', '10', 'bold'))
