@@ -30,14 +30,13 @@ def search(words, input_source=["All"], type=None):
         - "abstract" ： 返回标题，作者、摘要
         - "comment"  :  返回标题、作者、评论
     """
-
     if type=='comment':
         comment_list = get_comment(words)            # 获取评论
         return get_show_list(comment_list, type=type)
         
     paper_list = get_paper_list(words)
     words = words.split()    
-    # paper_list = filter_source(paper_list, input_source)
+    paper_list = filter_source(paper_list, input_source)
     
     # 把关键字加入历史
     global history
@@ -47,7 +46,8 @@ def search(words, input_source=["All"], type=None):
     sort_paper(paper_list, words) 
     
     # 返回结果
-    return get_show_list(paper_list, type=type)
+    rtn = get_show_list(paper_list, type=type)
+    return rtn
 
 # ============ 
 # 智能推送 

@@ -1,8 +1,17 @@
-from crawler import query, get_acm
+from crawler import query
 from pprint import pprint 
+from crawler_acm import crawler
+
+# results = crawler(key='quantum', max_results=2)
+# for result in results:
+#     print(result)
+
 
 def filter(target_list, func):
-    return [paper for paper in target_list if func(paper)]
+    rtn = [paper for paper in target_list if func(paper)]
+    if not rtn :
+        rtn = target_list 
+    return rtn
 
 def get_paper_list(words, max_cnt=10):
     """
@@ -14,11 +23,13 @@ def get_paper_list(words, max_cnt=10):
     # arxiv
     temp = query(search_query=words, max_chunk_results=max_cnt, max_results=max_cnt)
     for paper in temp:
-        paper["source"] = "arxiv" 
+        paper["source"] = "Arxiv" 
     result.extend(temp) 
     
     # acm 
-    # temp = get_acm(max_cnt) 
-    # pprint(temp[:max_cnt])
+    temp = crawler(key=words, max_results=max_cnt)
+    for paper in temp:
+        paper["source"] = "ACM"
+    result.extend(temp)
     
     return result
